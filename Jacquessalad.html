@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jacques Salad & Restaurant</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+body{background:#f5f5f5;color:#333;scroll-behavior:smooth;}
+nav{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.75);display:flex;justify-content:space-between;align-items:center;padding:10px 20px;z-index:1000;}
+nav h1{color:#fff;font-size:20px;}
+nav ul{display:flex;gap:15px;list-style:none;}
+nav ul li{color:#fff;cursor:pointer;font-size:14px;}
+nav ul li:hover{text-decoration:underline;}
+section{display:none;padding:100px 15px 80px;min-height:100vh;}
+section.active{display:block;}
+#home{background:url("https://i.imgur.com/junAQV2.jpeg") center/cover no-repeat;color:#fff;text-align:center;position:relative;}
+#home .overlay{background:rgba(0,0,0,0.55);min-height:100vh;padding-top:140px;}
+#home h2{font-size:32px;margin-bottom:10px;}
+#home p{font-size:16px;}
+.menu-section img{width:100%;max-width:400px;border-radius:8px;margin:10px 0;}
+.menu-grid{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;}
+.order-box{max-width:600px;margin:auto;background:#fff;padding:15px;border-radius:8px;}
+.order-box input,.order-box textarea,.order-box select{width:100%;padding:8px;margin:6px 0;}
+.total{font-weight:bold;margin-top:10px;text-align:center;}
+.order-table{width:100%;border-collapse:collapse;margin-top:10px;}
+.order-table th, .order-table td{border:1px solid #ccc;padding:8px;text-align:center;}
+.order-table th{background:#111;color:#fff;}
+button{background:#000;color:#fff;border:none;padding:10px;width:100%;border-radius:5px;cursor:pointer;margin-top:6px;}
+button:hover{opacity:.8;}
+.party-imgs img{width:100%;max-width:350px;border-radius:8px;margin:10px;}
+.admin-box{max-width:500px;margin:auto;background:#fff;padding:15px;border-radius:8px;}
+footer{position:fixed;bottom:0;width:100%;background:#000;color:#fff;display:flex;justify-content:space-between;padding:8px 15px;font-size:13px;z-index:1000;}
+footer a{color:#fff;text-decoration:none;margin:0 5px;}
+@media(max-width:600px){nav ul{gap:8px;font-size:12px;}#home h2{font-size:24px;}}
+#installBtn{position:fixed;bottom:80px;right:20px;padding:12px 20px;background:#000;color:#fff;border:none;border-radius:6px;display:none;z-index:1000;}
+</style>
+</head>
+<body>
+
+<nav>
+<h1>Jacques Salad & Restaurant</h1>
+<ul>
+<li onclick="openTab('home')">Home</li>
+<li onclick="openTab('menu')">Menu</li>
+<li onclick="openTab('order')">Order</li>
+<li onclick="openTab('reservations')">Reservations</li>
+<li onclick="openTab('admin')">Admin</li>
+</ul>
+</nav>
+
+<section id="home" class="active">
+<div class="overlay">
+<h2>Welcome to Jacques Salad & Restaurant</h2>
+<p>Fresh food • Great drinks • Memorable events</p>
+<p><strong>Enquiries:</strong> 255745794367</p>
+</div>
+</section>
+
+<section id="menu">
+<h2>Food Menu</h2>
+<div class="menu-section">
+<img src="https://i.imgur.com/H63fWHT.jpeg">
+<div class="menu-grid">
+<img src="https://i.imgur.com/glelhDv.jpeg">
+<img src="https://i.imgur.com/g1Jao4K.jpeg">
+<img src="https://i.imgur.com/OZK76CD.jpeg">
+<img src="https://i.imgur.com/golam8z.jpeg">
+<img src="https://i.imgur.com/vCT3H3j.jpeg">
+<img src="https://i.imgur.com/CJcO1Of.jpeg">
+<img src="https://i.imgur.com/VgdRN6C.jpeg">
+<img src="https://i.imgur.com/f3zHmq4.jpeg">
+<img src="https://i.imgur.com/KBrpYrm.jpeg">
+</div>
+<h2>Drinks Menu</h2>
+<img src="https://i.imgur.com/FuRNxQe.jpeg">
+<div class="menu-grid">
+<img src="https://i.imgur.com/yRWUBwa.jpeg">
+<img src="https://i.imgur.com/ZojJ2VU.jpeg">
+<img src="https://i.imgur.com/EOnUV37.jpeg">
+<img src="https://i.imgur.com/IkixzAf.jpeg">
+</div>
+</div>
+</section>
+
+<section id="order">
+<h2>Place Your Order</h2>
+<div class="order-box">
+<input id="meal" placeholder="Meal / Drink name">
+<input id="qty" type="number" placeholder="Quantity">
+<textarea id="note" placeholder="Additional instructions"></textarea>
+<select id="payment">
+<option>Paybill (M-Pesa)</option>
+<option>Pay on Delivery</option>
+</select>
+<div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+<img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PAYBILL:55340162 ACCOUNT:JSR-001" style="width:150px;height:150px;">
+<button onclick="scanQR()">Scan Code</button>
+</div>
+<p class="total" id="total">Order ID: JSR-001</p>
+<table class="order-table" id="orderTable">
+<thead><tr><th>Order ID</th><th>Meal</th><th>Qty</th><th>Notes</th></tr></thead>
+<tbody></tbody>
+</table>
+<button onclick="addOrder()">Add Order</button>
+<button onclick="sendAllOrders()">Send All Orders via WhatsApp</button>
+</div>
+</section>
+
+<section id="reservations">
+<h2>Table Reservations</h2>
+<div class="order-box">
+<input id="rname" placeholder="Name">
+<input id="rphone" placeholder="Phone">
+<input type="date" id="rdate">
+<input type="time" id="rtime">
+<input type="number" id="rpeople" placeholder="Number of People">
+<textarea id="rnotes" placeholder="Additional details"></textarea>
+<button onclick="sendReservation()">Submit Reservation</button>
+</div>
+
+<h2>Events</h2>
+<div class="party-imgs">
+<img src="https://i.imgur.com/L8ITbr0.jpeg">
+<img src="https://i.imgur.com/d6XxZDa.jpeg">
+</div>
+<div class="order-box">
+<input id="ename" placeholder="Name">
+<input id="ephone" placeholder="Phone">
+<input type="date" id="edate">
+<input type="time" id="etime">
+<input type="number" id="epeople" placeholder="Number of People">
+<textarea id="enotes" placeholder="Event details"></textarea>
+<button onclick="sendEvent()">Submit Event</button>
+</div>
+</section>
+
+<section id="admin">
+<h2>Admin Dashboard</h2>
+<div class="admin-box" id="adminLoginBox">
+<input type="text" id="adminUser" placeholder="Username">
+<input type="password" id="adminPass" placeholder="Password">
+<button onclick="adminLogin()">Login</button>
+</div>
+<div class="admin-box" id="adminDashboard" style="display:none;">
+<h3>Orders</h3>
+<ul id="adminOrders"></ul>
+<h3>Reservations</h3>
+<ul id="adminReservations"></ul>
+<button onclick="logoutAdmin()">Logout</button>
+</div>
+</section>
+
+<footer>
+<div>
+<a href="https://maps.app.goo.gl/TW7918t4LYDT5MSB8">📍 Location</a>
+</div>
+<div>
+<a href="https://www.facebook.com/share/1FCMT2kZwL/">👍 Facebook</a>
+<a href="https://www.instagram.com/jacquessalad_dodoma">📸 Instagram</a>
+<a href="https://www.tiktok.com/@jacquessalad_restaurant">🎵 TikTok</a>
+</div>
+</footer>
+
+<!-- Add to Home Screen Button -->
+<button id="installBtn">Add to Home Screen</button>
+
+<script>
+let orders=[];
+function openTab(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo(0,0);}
+function generateOrderID(){return "JSR-"+Math.floor(Math.random()*10000);}
+function addOrder(){let meal=document.getElementById("meal").value;let qty=document.getElementById("qty").value;let note=document.getElementById("note").value;if(!meal||!qty){alert("Fill meal and quantity");return;}let orderID=generateOrderID();orders.push({orderID,meal,qty,note});let tbody=document.getElementById("orderTable").querySelector("tbody");let row=document.createElement("tr");row.innerHTML=`<td>${orderID}</td><td>${meal}</td><td>${qty}</td><td>${note}</td>`;tbody.appendChild(row);document.getElementById("total").innerText="Order ID: "+orderID;document.getElementById("qrcode").src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PAYBILL:55340162 ACCOUNT:${orderID}`;document.getElementById("meal").value="";document.getElementById("qty").value="";document.getElementById("note").value="";}
+function scanQR(){window.open(document.getElementById("qrcode").src,"_blank");}
+function sendAllOrders(){if(orders.length===0){alert("No orders added");return;}let msg=orders.map(o=>`Order ID:${o.orderID}\n${o.meal} x${o.qty}\nNotes:${o.note}`).join("\n\n");window.open(`https://wa.me/255745794367?text=${encodeURIComponent(msg)}`);orders=[];document.getElementById("orderTable").querySelector("tbody").innerHTML="";document.getElementById("total").innerText="Order ID: JSR-001";document.getElementById("qrcode").src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PAYBILL:55340162 ACCOUNT:JSR-001`;}
+function sendReservation(){let name=document.getElementById("rname").value;let phone=document.getElementById("rphone").value;let date=document.getElementById("rdate").value;let time=document.getElementById("rtime").value;let people=document.getElementById("rpeople").value;let notes=document.getElementById("rnotes").value;if(!name||!phone||!date||!time||!people){alert("Fill all fields");return;}let msg=`Table Reservation\nName:${name}\nPhone:${phone}\nDate:${date}\nTime:${time}\nPeople:${people}\nNotes:${notes}`;window.open(`https://wa.me/255745794367?text=${encodeURIComponent(msg)}`);alert("Reservation sent via WhatsApp!");document.getElementById("rname").value="";document.getElementById("rphone").value="";document.getElementById("rdate").value="";document.getElementById("rtime").value="";document.getElementById("rpeople").value="";document.getElementById("rnotes").value="";}
+function sendEvent(){let name=document.getElementById("ename").value;let phone=document.getElementById("ephone").value;let date=document.getElementById("edate").value;let time=document.getElementById("etime").value;let people=document.getElementById("epeople").value;let notes=document.getElementById("enotes").value;if(!name||!phone||!date||!time||!people){alert("Fill all fields");return;}let msg=`Event Reservation\nName:${name}\nPhone:${phone}\nDate:${date}\nTime:${time}\nPeople:${people}\nNotes:${notes}`;window.open(`https://wa.me/255745794367?text=${encodeURIComponent(msg)}`);alert("Event sent via WhatsApp!");document.getElementById("ename").value="";document.getElementById("ephone").value="";document.getElementById("edate").value="";document.getElementById("etime").value="";document.getElementById("epeople").value="";document.getElementById("enotes").value="";}
+function adminLogin(){let u=document.getElementById("adminUser").value;let p=document.getElementById("adminPass").value;if(u==="admin"&&p==="123"){document.getElementById("adminLoginBox").style.display="none";document.getElementById("adminDashboard").style.display="block";loadAdmin();}else{alert("Wrong credentials");}}
+function logoutAdmin(){document.getElementById("adminLoginBox").style.display="block";document.getElementById("adminDashboard").style.display="none";}
+function loadAdmin(){document.getElementById("adminOrders").innerHTML=orders.map(o=>`<li>${o.orderID}: ${o.meal} x${o.qty} (${o.note})</li>`).join("");document.getElementById("adminReservations").innerHTML="<li>Reservations submitted via WhatsApp</li>";}
+
+// Add to Home Screen Prompt
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e)=>{
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'block';
+});
+installBtn.addEventListener('click', async ()=>{
+    installBtn.style.display = 'none';
+    if(deferredPrompt){
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+    }
+});
+
+// Register Service Worker
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js')
+    .then(()=>console.log('Service Worker registered'))
+    .catch(err=>console.log('SW registration failed:',err));
+}
+</script>
+</body>
+</html>
